@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+<nav class="navbar navbar-expand-md navbar-dark fixed-top">
     <div class="container">
         <a class="navbar-brand" href="{{ url('/') }}"> Powitanie </a>
         <a class="navbar-brand" href="{{ route('comments') }}"> Komentarze </a>
@@ -38,3 +38,21 @@
         </div>
     </div>
 </nav>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script>
+  // Add any additional script here if necessary
+  // This script adds a class to the navbar when scrolled
+  $(window).scroll(function() {
+    if ($(document).scrollTop() > 50) {
+      $('.navbar').addClass('navbar-scrolled');
+      $('.navbar').addClass('shadow-sm');
+      $('.navbar').removeClass('navbar-top');
+    } else {
+      $('.navbar').removeClass('navbar-scrolled');
+        $('.navbar').removeClass('shadow-sm');
+      $('.navbar').addClass('navbar-top');
+    }
+  });
+</script>
