@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CommentsController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\RestaurantController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,3 +30,10 @@ Route::post('/store',[CommentsController::class,'store'])->name('store');
 Route::get('/delete/{id}',[CommentsController::class,'destroy'])->name('delete');
 Route::get('/edit/{id}', [CommentsController::class,'edit'])->name('edit');
 Route::post('/update/{id}', [CommentsController::class,'update'])->name('update');
+
+Route::get('/service', function () {
+    return view('service');
+}) ->name('service');
+
+Route::get('/restaurant', [RestaurantController::class,'index'])->name('restaurant');
+Route::get('/restaurantCreate',[RestaurantController::class,'create'])->name('restaurantCreate');

@@ -26,41 +26,42 @@
     <body class="antialiased">
         @include('layouts.navbar')
         <div class="relative sm:flex sm:justify-center sm:items-center min-h-screen bg-pizza bg-center">
-            <!-- @if (Route::has('login'))
-                <div class="sm:fixed sm:top-0 sm:right-0 p-6 text-right z-10">
-                    @auth
-                        <a href="{{ url('/home') }}" class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Home</a>
-                    @else
-                        <a href="{{ route('login') }}" class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Log in</a>
-
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}" class="ml-4 font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Register</a>
-                        @endif
-                    @endauth
-                </div>
-            @endif -->
-
-            
-
             <div class="max-w-7xl mx-auto p-6 lg:p-8">
 
-                <div class="mt-16">
-                    <h1 class="font-semibold dark:text-gray-400" style="font-size: 3em; margin-bottom: 1em;">Manufaktura pizzy</h1>
-                    <h2 class="font-semibold dark:text-gray-400" style="font-size: 2em; margin-bottom: 1em;">Wszystko, czego potrzebujesz, w jednym miejscu</h2>
+                <div class="table-container">
+                    <h1 class="font-semibold dark:text-gray-400" style="font-size: 3em; margin-bottom: 1em;">Złóż zamówienie</h1>
+                    <form role="form" action="{{ route('store') }}" id="restaurant-order-form" method="post" enctype="multipart/form-data">
+                        {{ csrf_field() }}
+                        <table data-toggle="table" class="table table-striped table-bordered table-hover table-light">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Nazwa</th>
+                                    <th>Składniki</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($pizzaList as $pizza)
+                                <tr>
+                                    <td>{{ $pizza->name }}</td>
+                                    <td>{{ $pizza->ingredients }}</td>
+                                    <td>
+                                        <a href="{{route('store', $pizza)}}" type="submit" class="btn btn-primary">Wybierz </a>
+                                    </td>
+                                </tr>
+                                @endforeach
+                                <tr>
+                                    <td>Proprio</td>
+                                    <td>Własna kompozycja składników</td>
+                                    <td>
+                                        <a href="{{route('restaurantCreate')}}" class="btn btn-primary">Wybierz </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </form>
                 </div>
-                @auth
-                <div class="mt-16">
-                    <div class="flex justify-center">
-                        <a href="{{ route('service') }}" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full">
-                            Rozpocznij
-                        </a>
-                    </div>
-                </div>
-                @else
-                <div class="mt-16">
-                    <h1 class="font-semibold dark:text-gray-400" style="font-size: 3em; margin-bottom: 1em;">Zaloguj się, aby złożyć zamówienie</h1>
-                </div>
-                @endauth
             </div>
         </div>
     </body>
