@@ -5,15 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Order extends Model
+class Pizza extends Model
 {
     protected $fillable = [
-        'user_id',
-        'placed_at',
-        'completed_at',
-        'total_price',
-        'total_weight',
-        'total_calories',
+        'order_id',
     ];
     public $timestamps = false;
     use HasFactory;

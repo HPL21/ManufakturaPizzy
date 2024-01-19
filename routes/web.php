@@ -37,3 +37,4 @@ Route::get('/service', function () {
 
 Route::get('/restaurant', [RestaurantController::class,'index'])->name('restaurant');
 Route::get('/restaurantCreate',[RestaurantController::class,'create'])->name('restaurantCreate');
+Route::get('/restaurantStore/{id}',[RestaurantController::class,'store'])->name('restaurantStore');

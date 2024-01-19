@@ -46,7 +46,7 @@
                                     <td>{{ $pizza->name }}</td>
                                     <td>{{ $pizza->ingredients }}</td>
                                     <td>
-                                        <a href="{{route('store', $pizza)}}" type="submit" class="btn btn-primary">Wybierz </a>
+                                        <a href="{{ route('restaurantStore', $pizza->name) }}" class="btn btn-primary">Wybierz </a>
                                     </td>
                                 </tr>
                                 @endforeach
