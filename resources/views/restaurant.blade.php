@@ -46,7 +46,7 @@
                                     <td>{{ $pizza->name }}</td>
                                     <td>{{ $pizza->ingredients }}</td>
                                     <td>
-                                        <a href="{{ route('restaurantStore', $pizza->name) }}" class="btn btn-primary">Wybierz </a>
+                                        <a href="{{ route('restaurantStore', $pizza) }}" class="btn btn-primary">Wybierz </a>
                                     </td>
                                 </tr>
                                 @endforeach
@@ -59,8 +59,11 @@
                                 </tr>
                             </tbody>
                         </table>
-
+                        
                     </form>
+                    @if ($request != null)
+                        <p>Wybrano pizzę: {{$request->name}}, cena: {{$request->price}}, kalorie: {{$request->calories}}, waga: {{$request->weight}}</p>
+                    @endif
                 </div>
             </div>
         </div>

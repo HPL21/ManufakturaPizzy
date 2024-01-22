@@ -11,11 +11,16 @@ use Illuminate\Support\Facades\DB;
 
 class RestaurantController extends Controller
 {
-    public $pizzaList = PizzaOption::orderBy('id', 'asc')->get();
+    public $pizzaList;
+
+    public function __construct()
+    {
+        $this->pizzaList = PizzaOption::all();
+    }
 
     public function index()
     {
-        return view('restaurant', ['pizzaList' => $this->pizzaList]);
+        return view('restaurant', ['pizzaList' => $this->pizzaList, 'request' => null]);
     }
 
     public function create()
@@ -47,18 +52,32 @@ class RestaurantController extends Controller
         }
 
         $pizza = Pizza::create([
-            'order_id' => $order->id
+            'order_id' => $order->id,
+            'weight' => 0,
+            'calories' => 0,
+            'price' => 0
         ]);
 
 
         echo "<script type='text/javascript'>alert('$request');</script>";
 
-        // $pizzaOption = DB::table('pizza_options')->where('id', $request->pizzaOption)->first();
+        $pizzaOption = DB::table('pizza_options')->where('id', $request->id)->first();
 
-        // $ingredients = $pizzaOption->ingredients;
+        $ingredients = $pizzaOption->ingredients;
 
-        // return view('restaurant', ['pizzaList' => $ingredients]);
-        return view('restaurant', ['pizzaList' => $this->pizzaList]);
+        $ingredients = explode(",", $ingredients);
+
+        foreach ($ingredients as $ingredient) {
+            $ingredient = trim($ingredient);
+            $ingredient = DB::table('ingredients')->where('name', $ingredient)->first();
+            $pizza->weight += $ingredient->weight;
+            $pizza->calories += $ingredient->calories;
+            $pizza->price += $ingredient->price;
+        }
+
+        $pizza->save();
+
+        return view('restaurant', ['pizzaList' => $this->pizzaList, 'request' => $pizza]);
 
     }
 
