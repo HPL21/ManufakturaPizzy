@@ -26,46 +26,42 @@
     <body class="antialiased">
         @include('layouts.navbar')
         <div class="relative sm:flex sm:justify-center sm:items-center min-h-screen bg-pizza bg-center">
-            <div class="max-w-7xl mx-auto p-6 lg:p-8">
+            <div class="max-w-7xl mx-auto p-6 lg:p-8" style="background-color: #e5e7eb;">
+                <form role="form" action="{{ route('restaurantPlaceOrder') }}" id="restaurant-order-form" method="post" enctype="multipart/form-data">
+                    {{ csrf_field() }}
+                    @foreach ($pizzas as $pizza)
+                        Nazwa pizzy: {{ $pizza->name }}<br>
+                        Cena: {{ $pizza->price }}<br>
+                        Waga: {{ $pizza->weight }}<br>
+                        Kalorie: {{ $pizza->calories }}<br>
+                        <a href="{{ route('restaurantRemovePizza', ['id' => $pizza->id]) }}">Usuń pizzę</a><br>
+                    @endforeach
 
-                <div class="table-container">
-                    <h1 class="font-semibold dark:text-gray-400" style="font-size: 3em; margin-bottom: 1em;">Złóż zamówienie</h1>
-                    <form role="form" action="{{ route('store') }}" id="restaurant-order-form" method="post" enctype="multipart/form-data">
-                        {{ csrf_field() }}
-                        <table data-toggle="table" class="table table-striped table-bordered table-hover table-light">
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th>Nazwa</th>
-                                    <th>Składniki</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($pizzaList as $pizza)
-                                <tr>
-                                    <td>{{ $pizza->name }}</td>
-                                    <td>{{ $pizza->ingredients }}</td>
-                                    <td>
-                                        <a href="{{ route('restaurantStore', $pizza) }}" class="btn btn-primary">Wybierz </a>
-                                    </td>
-                                </tr>
+                    Zamówienie:<br>
+                    Kwota zamówienia: {{ $order->total_price }}<br>
+                    Waga: {{ $order->total_weight }}<br>
+                    Kalorie: {{ $order->total_calories }}<br>
+                    Dane dostawy:
+                    <input type="text" name="name" placeholder="Imię i nazwisko" required><br>
+                    <input type="text" name="address" placeholder="Adres" required><br>
+                    <input type="text" name="phone" placeholder="Numer telefonu" required><br>
+                    <input type="text" name="email" placeholder="Adres e-mail" required><br>
+                    <input type="radio" id="cash" name="payment" value="cash" checked>
+                    <label for="cash">Płatność gotówką</label><br>
+                    <input type="radio" id="card" name="payment" value="card">
+                    <label for="card">Płatność kartą</label><br>
+                    @if($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach($errors->all() as $error)
+                                    <li>{{ $error }}</li>
                                 @endforeach
-                                <tr>
-                                    <td>Proprio</td>
-                                    <td>Własna kompozycja składników</td>
-                                    <td>
-                                        <a href="{{route('restaurantCreate')}}" class="btn btn-primary">Wybierz </a>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        
-                    </form>
-                    @if ($request != null)
-                        <p>Wybrano pizzę: {{$request->name}}, cena: {{$request->price}}, kalorie: {{$request->calories}}, waga: {{$request->weight}}</p>
+                            </ul>
+                        </div>
                     @endif
-                    <a href="{{route('restaurantSummary')}}" class="btn btn-primary">Przejdź do podsumowania</a>
-                </div>
+                    <a href="{{ route('restaurant') }}">Wróć do restauracji</a>
+                    <input type="submit" value="Złóż zamówienie">            
+                </form> 
             </div>
         </div>
     </body>

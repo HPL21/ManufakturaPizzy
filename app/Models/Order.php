@@ -14,6 +14,11 @@ class Order extends Model
         'total_price',
         'total_weight',
         'total_calories',
+        'recipient_name',
+        'recipient_address',
+        'recipient_phone',
+        'recipient_email',
+        'payment_method'
     ];
     public $timestamps = false;
     use HasFactory;

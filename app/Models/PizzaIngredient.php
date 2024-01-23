@@ -7,5 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class PizzaIngredient extends Model
 {
+    protected $fillable = [
+        'pizza_id', 'ingredient_id', 'ingredient_amount'
+    ];
+    public $timestamps = false;
     use HasFactory;
 }

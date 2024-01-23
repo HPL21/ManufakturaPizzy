@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Pizza extends Model
 {
     protected $fillable = [
-        'order_id', 'weight', 'calories', 'price' 
+        'order_id', 'name', 'weight', 'calories', 'price' 
     ];
     public $timestamps = false;
     use HasFactory;
