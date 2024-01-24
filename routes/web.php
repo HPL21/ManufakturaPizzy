@@ -42,3 +42,10 @@ Route::post('/pizzaCreate',[RestaurantController::class,'pizzaCreate'])->name('p
 Route::get('/restaurantSummary',[RestaurantController::class,'summary'])->name('restaurantSummary');
 Route::post('/restaurantPlaceOrder',[RestaurantController::class,'placeOrder'])->name('restaurantPlaceOrder');
 Route::get('/restaurantRemovePizza/{id}',[RestaurantController::class,'removePizza'])->name('restaurantRemovePizza');
+Route::get('/admin',[RestaurantController::class,'admin'])->name('admin');
+Route::get('/adminEditOrder/{id}',[RestaurantController::class,'adminEditOrder'])->name('adminEditOrder');
+Route::put('/adminUpdateOrder/{id}',[RestaurantController::class,'adminUpdateOrder'])->name('adminUpdateOrder');
+Route::get('/adminDeleteOrder/{id}',[RestaurantController::class,'adminDeleteOrder'])->name('adminDeleteOrder');
+Route::get('/adminCompleteOrder/{id}',[RestaurantController::class,'adminCompleteOrder'])->name('adminCompleteOrder');
+Route::get('/adminShowOrder/{id}',[RestaurantController::class,'adminShowOrder'])->name('adminShowOrder');
+Route::get('/adminSorted',[RestaurantController::class,'adminSorted'])->name('adminSorted');
