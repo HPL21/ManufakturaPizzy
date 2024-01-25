@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\Models\PizzaOption;
 use App\Models\Pizza;
 use App\Models\PizzaIngredient;
-use App\Models\User;
 use App\Models\Order;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -37,22 +36,29 @@ class RestaurantController extends Controller
     {
         $user = auth()->user();
 
-        // Check if there are no active orders or all orders are completed
         $hasActiveOrders = DB::table('orders')->where('user_id', $user->id)->whereNull('placed_at')->whereNull('completed_at')->exists();
 
         if (!$hasActiveOrders) {
-            // Create a new order
             $order = Order::create([
                 'user_id' => $user->id,
-                'total_price' => 0, // You can set initial values as needed
+                'total_price' => 0,
                 'total_weight' => 0,
                 'total_calories' => 0,
             ]);
         }
         else {
-            // Get the last order
-            $order =DB::table('orders')->where('user_id', $user->id)->whereNull('placed_at')->whereNull('completed_at')->first();
+            $order = DB::table('orders')->where('user_id', $user->id)->whereNull('placed_at')->whereNull('completed_at')->first();
             $order = Order::find($order->id);
+        }
+
+        $ingredientsCount = $request->ingredients;
+
+        for ($i = 1; $i <= $ingredientsCount; $i++) {
+            $ingredient = $request->input('ingredient' . $i);
+            $ingredientAmount = $request->input('ingredient' . $i . 'amount');
+            if ($ingredient == null || $ingredientAmount == null) {
+                return back()->withErrors(['message' => 'Nie wybrano składników.']);
+            }
         }
 
         $pizza = Pizza::create([
@@ -67,7 +73,6 @@ class RestaurantController extends Controller
         $pizza->calories += $request->doughWeight / 200 * 325;
         $pizza->price += $request->doughWeight / 200 * 15;
 
-        $ingredientsCount = $request->ingredients;
 
         for ($i = 1; $i <= $ingredientsCount; $i++) {
             $ingredient = $request->input('ingredient' . $i);
@@ -96,20 +101,17 @@ class RestaurantController extends Controller
     {
         $user = auth()->user();
 
-        // Check if there are no active orders or all orders are completed
         $hasActiveOrders = DB::table('orders')->where('user_id', $user->id)->whereNull('placed_at')->whereNull('completed_at')->exists();
 
         if (!$hasActiveOrders) {
-            // Create a new order
             $order = Order::create([
                 'user_id' => $user->id,
-                'total_price' => 0, // You can set initial values as needed
+                'total_price' => 0, 
                 'total_weight' => 0,
                 'total_calories' => 0,
             ]);
         }
         else {
-            // Get the last order
             $order = DB::table('orders')->where('user_id', $user->id)->whereNull('placed_at')->whereNull('completed_at')->first();
             $order = Order::find($order->id);
         }
@@ -144,29 +146,25 @@ class RestaurantController extends Controller
 
     }
 
-    public function summary(Request $request)
+    public function summary()
     {
         $user = auth()->user();
 
-        // Check if there are no active orders or all orders are completed
         $hasActiveOrders = DB::table('orders')->where('user_id', $user->id)->whereNull('placed_at')->whereNull('completed_at')->exists();
 
         if (!$hasActiveOrders) {
-            // Create a new order
             $order = Order::create([
                 'user_id' => $user->id,
-                'total_price' => 0, // You can set initial values as needed
+                'total_price' => 0,
                 'total_weight' => 0,
                 'total_calories' => 0,
             ]);
         }
         else {
-            // Get the last order
             $order = DB::table('orders')->where('user_id', $user->id)->whereNull('placed_at')->whereNull('completed_at')->first();
             $order = Order::find($order->id);
         }
 
-        // Get all pizzas from the order
 
         $pizzas = DB::table('pizzas')->where('order_id', $order->id)->get();
 
@@ -190,14 +188,12 @@ class RestaurantController extends Controller
 
         $user = auth()->user();
 
-        // Check if there are no active orders or all orders are completed
         $hasActiveOrders = DB::table('orders')->where('user_id', $user->id)->whereNull('placed_at')->whereNull('completed_at')->exists();
 
         if (!$hasActiveOrders) {
             return back()->withErrors(['message' => 'Nie można złożyć zamówienia, ponieważ nie ma aktywnych zamówień.']);
         }
         else {
-            // Get the last order
             $order = DB::table('orders')->where('user_id', $user->id)->whereNull('placed_at')->whereNull('completed_at')->first();
             $order = Order::find($order->id);
         }
@@ -211,7 +207,7 @@ class RestaurantController extends Controller
 
         $order->save();
 
-        return redirect()->route('home');
+        return redirect()->route('welcome')->with('success', 'Zamówienie zostało złożone.');
     }
 
     public function removePizza($id)
@@ -220,83 +216,6 @@ class RestaurantController extends Controller
         $pizza->delete();
 
         return redirect()->route('restaurantSummary');
-    }
-
-    public function admin()
-    {
-        $orders = DB::table('orders')->whereNotNull('placed_at')->get();
-
-        return view('admin', ['orders' => $orders, 'sortBy' => 'id', 'sortOrder' => 'asc']);
-    }
-
-    public function adminSorted(Request $request)
-    {
-        $ordersQuery = Order::query();
-
-        // Sorting logic
-        $sortableFields = ['id', 'placed_at', 'completed_at', 'total_price', 'total_weight', 'total_calories'];
-        $sortBy = $request->query('sort_by', 'id');
-        $sortOrder = $request->query('sort_order', 'asc');
-    
-        if (in_array($sortBy, $sortableFields)) {
-            $ordersQuery->orderBy($sortBy, $sortOrder);
-        }
-    
-        $orders = $ordersQuery->get();
-
-        return view('admin', compact('orders', 'sortBy', 'sortOrder'));
-    }
-
-    public function adminEditOrder($id)
-    {
-        $order = Order::find($id);
-
-        return view('adminEditOrder', ['order' => $order]);
-    }
-
-    public function adminUpdateOrder(Request $request, $id)
-    {
-        $order = Order::find($id);
-
-        $order->placed_at = $request->placed_at;
-        $order->completed_at = $request->completed_at;
-        $order->total_price = $request->total_price;
-        $order->total_weight = $request->total_weight;
-        $order->total_calories = $request->total_calories;
-        $order->recipient_name = $request->name;
-        $order->recipient_address = $request->address;
-        $order->recipient_phone = $request->phone;
-        $order->recipient_email = $request->email;
-        $order->payment_method = $request->payment;
-
-        $order->save();
-
-        return redirect()->route('admin');
-    }
-
-    public function adminDeleteOrder($id)
-    {
-        $order = Order::find($id);
-        $order->delete();
-
-        return redirect()->route('admin');
-    }
-
-    public function adminCompleteOrder($id)
-    {
-        $order = Order::find($id);
-        $order->completed_at = now();
-        $order->save();
-
-        return redirect()->route('admin');
-    }
-
-    public function adminShowOrder($id)
-    {
-        $order = Order::find($id);
-        $pizzas = DB::table('pizzas')->where('order_id', $order->id)->get();
-
-        return view('adminShowOrder', ['order' => $order, 'pizzas' => $pizzas]);
     }
 
 }
