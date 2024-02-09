@@ -13,41 +13,43 @@ To run this project locally, you need to have the following tools installed:
 
 ### Installation Instructions
 
-1.  Clone the project repository to the `htdocs` directory in XAMPP:
+Clone the project repository to the `htdocs` directory in XAMPP:
     ```
     git clone https://github.com/HPL21/ManufakturaPizzy
     ```
-2.  Navigate to the `ManufakturaPizzy` directory:
+Navigate to the `ManufakturaPizzy` directory:
     ```
     cd ManufakturaPizzy
     ```
-3.  Install dependencies using Composer:
+Install dependencies using Composer:
     ```
     composer install
     ```
-4.  Rename the `.env.example` file to `.env`
+Rename the `.env.example` file to `.env`
     
-5.  Start XAMPP and initiate Apache and MySQL.
+Start XAMPP and initiate Apache and MySQL.
     
-6.  Open phpMyAdmin and create a new database named `manufakturapizzy`.
+Open phpMyAdmin and create a new database named `manufakturapizzy`.
     
-7.  Run database migrations using Artisan:
+Run database migrations using Artisan:
     ```
     php artisan migrate
     ```
-8.  Install JavaScript dependencies using npm:
+Install JavaScript dependencies using npm:
     ```
     npm install
     ```
-9.  Build JavaScript assets:
+Build JavaScript assets:
     ```
     npm run build
     ```
-10.  Run the server using Artisan:
+Run the server using Artisan:
+    ```
     php artisan serve
-11.  Open a web browser and go to [http://localhost:8000/](http://localhost:8000/), where you can register in the system.
+    ```
+Open a web browser and go to [http://localhost:8000/](http://localhost:8000/), where you can register in the system.
     
-12.  To create an admin user, simply change the value of the `is_admin` field in the `users` table in the database to `1`.
+To create an admin user, simply change the value of the `is_admin` field in the `users` table in the database to `1`.
     
 ### Screenshots
 
