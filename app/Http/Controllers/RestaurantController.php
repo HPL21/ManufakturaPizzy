@@ -26,7 +26,7 @@ class RestaurantController extends Controller
         return view('restaurant', ['pizzaList' => $this->pizzaList, 'request' => null]);
     }
 
-    public function create(Request $request)
+    public function create()
     {
 
         return view('restaurantCreate', ['ingredientsList' => $this->ingedientsList]);
