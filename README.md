@@ -44,9 +44,7 @@ To run this project locally, you need to have the following tools installed:
     npm run build
     ```
 10.  Run the server using Artisan:
-    ```
     php artisan serve
-    ```
 11.  Open a web browser and go to [http://localhost:8000/](http://localhost:8000/), where you can register in the system.
     
 12.  To create an admin user, simply change the value of the `is_admin` field in the `users` table in the database to `1`.
